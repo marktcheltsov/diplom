@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const { default: isURL } = require('validator/lib/isURL');
 
 const movieSchema = new mongoose.Schema({
-
   country: {
     type: String,
     required: true,
