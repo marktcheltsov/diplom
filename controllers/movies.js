@@ -4,6 +4,7 @@ const NotFoundError = require('../errors/not-found-err');
 
 const ValidationErr = require('../errors/validation-err');
 const IncomprehensibleErr = require('../errors/incomprehensible-err');
+const AccessErr = require('../errors/access-err');
 
 const getMovies = async (req, res, next) => {
   try {
@@ -18,8 +19,10 @@ const getMovies = async (req, res, next) => {
 
 const saveMovie = async (req, res, next) => {
   req.body.owner = req.user._id;
+  console.log(req.body);
   try {
     const movie = await Movie.create(req.body);
+    console.log(req.body);
     return res.status(200).json(movie);
   } catch (e) {
     if (e.name === 'ValidationError') {
@@ -41,7 +44,15 @@ const deleteMovie = async (req, res, next) => {
       const err = new NotFoundError('Запрашиваемый фильм не найден');
       return next(err);
     }
-    movie.remove();
+    if (movie.owner.toString() !== req.user._id) {
+      const err = new AccessErr('у вас нет прав на это');
+      return next(err);
+    }
+    movie.remove().catch((e) => {
+      console.error(e);
+      const err = new IncomprehensibleErr('произошла ошибка');
+      return next(err);
+    });
     return res.status(200).json(movie);
   } catch (e) {
     if ((e.name === 'CastError') || (e.name === 'TypeError')) {

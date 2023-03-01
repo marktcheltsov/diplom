@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, DATA_BASE } = process.env;
 
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -66,7 +66,7 @@ app.use((err, req, res, next) => {
   handleError(err, req, res, next);
 });
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(NODE_ENV === 'production' ? DATA_BASE : 'mongodb://localhost:27017/bitfilmsdb', {
   useNewUrlParser: true,
 }, () => {
   app.listen(PORT, () => {

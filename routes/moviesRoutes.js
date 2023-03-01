@@ -13,17 +13,20 @@ router.post('/', celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required(),
-    trailerLink: Joi.string().required(),
-    thumbnail: Joi.string().required(),
-    owner: Joi.string().required(),
-    movieId: Joi.string().required(),
+    image: Joi.string().required().uri(),
+    trailerLink: Joi.string().uri(),
+    thumbnail: Joi.string().required().uri(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
 }), saveMovie);
 
-router.delete('/:id', deleteMovie);
+router.delete('/:id', celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().alphanum().hex().length(24),
+  }),
+}), deleteMovie);
 
 const moviesRouter = router;
 module.exports = moviesRouter;

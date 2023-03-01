@@ -51,6 +51,10 @@ const updateUser = async (req, res, next) => {
       const err = new ValidationErr('Переданы некорректные данные при обновлении');
       return next(err);
     }
+    if (e.code === 11000) {
+      const err = new DataAuthErr('пользователь с такой почтой уже есть');
+      next(err);
+    }
     console.error(e);
     const err = new IncomprehensibleErr('произошла ошибка');
     return next(err);
