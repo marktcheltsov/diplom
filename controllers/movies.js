@@ -19,10 +19,8 @@ const getMovies = async (req, res, next) => {
 
 const saveMovie = async (req, res, next) => {
   req.body.owner = req.user._id;
-  console.log(req.body);
   try {
     const movie = await Movie.create(req.body);
-    console.log(req.body);
     return res.status(200).json(movie);
   } catch (e) {
     if (e.name === 'ValidationError') {
