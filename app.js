@@ -18,7 +18,9 @@ const { handleError } = require('./middlewares/handleError');
 
 const NotFoundError = require('./errors/not-found-err');
 
-const routers = require('./routes/index');
+const userRouter = require('./routes/userRoutes');
+
+const moviesRouter = require('./routes/moviesRoutes');
 
 const allowedCors = ['http://diplomamarkuhaaa.nomoredomains.work', 'http://localhost:3000', 'https://diplomamarkuhaaa.nomoredomains.work'];
 
@@ -51,7 +53,8 @@ app.post('/signin', celebrate({
 
 app.use(auth);
 
-app.use('/', routers);
+app.use('/users', userRouter);
+app.use('/movies', moviesRouter);
 
 app.use('*', (req, res, next) => {
   const err = new NotFoundError('указан неправильный путь');
