@@ -46,14 +46,8 @@ const deleteMovie = async (req, res, next) => {
       const err = new AccessErr('у вас нет прав на это');
       return next(err);
     }
-    try {
-      const deletedMovie = await movie.remove();
-      return res.status(200).json(deletedMovie);
-    } catch (e) {
-      console.error(e);
-      const err = new IncomprehensibleErr('произошла ошибка');
-      return next(err);
-    }
+    const deletedMovie = await movie.remove();
+    return res.status(200).json(deletedMovie);
   } catch (e) {
     if ((e.name === 'CastError') || (e.name === 'TypeError')) {
       console.error(e);
