@@ -8,8 +8,11 @@ const bodyParser = require('body-parser');
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, './frontend/build')));
 
 const { createUser, login } = require('./controllers/user');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
